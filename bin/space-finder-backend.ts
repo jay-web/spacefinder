@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
-import { SpaceFinderBackendStack } from '../lib/space-finder-backend-stack';
+import { SpaceFinderStack } from '../lib/space-finder-stack';
 
 const app = new cdk.App();
-new SpaceFinderBackendStack(app, 'SpaceFinderBackendStack', {
+new SpaceFinderStack(app, 'SpaceFinderBackendStack', {
   /* If you don't specify 'env', this stack will be environment-agnostic.
    * Account/Region-dependent features and context lookups will not work,
    * but a single synthesized template can be deployed anywhere. */
@@ -18,4 +18,5 @@ new SpaceFinderBackendStack(app, 'SpaceFinderBackendStack', {
   // env: { account: '123456789012', region: 'us-east-1' },
 
   /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
+  stackName: 'Space-finder'
 });
