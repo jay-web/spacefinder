@@ -6,6 +6,7 @@ import {Code, Function as LambdaFunction, Runtime } from 'aws-cdk-lib/aws-lambda
 
 import { LambdaIntegration, RestApi } from 'aws-cdk-lib/aws-apigateway';
 import { GenericTable } from './genericTable';
+import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 
 export class SpaceFinderStack extends cdk.Stack {
   // todo: Create instance of restapi from aws gateway api
@@ -22,6 +23,13 @@ export class SpaceFinderStack extends cdk.Stack {
       runtime: Runtime.NODEJS_16_X,
       code: Code.fromAsset(join(__dirname, '..', 'services', 'hello')),
       handler: 'hello.main'
+    })
+
+    // todo: Create node lambda function 
+
+    const helloNodeLambda = new NodejsFunction(this, "helloNodeLambda", {
+      entry: join(__dirname, '..', 'services', 'node-lambdas', 'hello.ts'),
+      handler: 'handler'
     })
 
     // todo: hello api integration with lambda service
