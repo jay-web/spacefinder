@@ -16,7 +16,8 @@
                 "${relativeFile}"
             ],
             "env": {
-                "AWS-REGION": "us-east-1"
+                "region": "us-east-1",
+                "TABLE_NAME": "tableForSpaceFinder"
             }
         }
     ]

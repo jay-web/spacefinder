@@ -14,7 +14,13 @@ export class SpaceFinderStack extends cdk.Stack {
   private api = new RestApi(this, 'SpaceFinderApi');
 
   // todo: Create Dynamo DB Table
-  private spaceFinderTable = new GenericTable("SpaceFinderTable", "SpaceFinder", this);
+  private tableForSpaceFinder = new GenericTable(this, {
+    tableName: "tableForSpaceFinder", 
+    primaryKey: "SpaceFinderId",
+    createLambdaPath: 'create'
+  
+  }
+    );
 
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
@@ -26,24 +32,33 @@ export class SpaceFinderStack extends cdk.Stack {
     //   handler: 'hello.main'
     // })
 
-    // todo: Create node lambda function 
-    const helloNodeLambda = new NodejsFunction(this, "helloNodeLambda", {
-      entry: join(__dirname, '..', 'services', 'node-lambdas', 'hello.ts'),
-      handler: 'handler'
-    });
+     // ? Example code =====
+
+    // todo: Create node lambda function and attach to our lambda handler function
+    // const helloNodeLambda = new NodejsFunction(this, "helloNodeLambda", {
+    //   entry: join(__dirname, '..', 'services', 'node-lambdas', 'hello.ts'),
+    //   handler: 'handler'
+    // });
 
     // todo: Create new policy statement to add s3 list bucket action to out lambda function
-    const s3listPolicy = new PolicyStatement();
-    s3listPolicy.addActions('s3:ListAllMyBuckets');
-    s3listPolicy.addResources('*');
+    // const s3listPolicy = new PolicyStatement();
+    // s3listPolicy.addActions('s3:ListAllMyBuckets');
+    // s3listPolicy.addResources('*');
 
     // todo: Attach s3listPolicy to lambda function finally
-    helloNodeLambda.addToRolePolicy(s3listPolicy);
+    // helloNodeLambda.addToRolePolicy(s3listPolicy);
 
     // todo: hello api integration with lambda service
-    const helloLambdaIntegration = new LambdaIntegration(helloNodeLambda);
-    const helloLambdaResource =  this.api.root.addResource('hello');
-    helloLambdaResource.addMethod('GET', helloLambdaIntegration);
+    // const helloLambdaIntegration = new LambdaIntegration(helloNodeLambda);
+    // const helloLambdaResource =  this.api.root.addResource('hello');
+    // helloLambdaResource.addMethod('GET', helloLambdaIntegration);
+
+    // ? ----------Example code ends =====
+
+    // todo: Add the Space resource to api
+    const spaceResource = this.api.root.addResource("spaces");
+    // todo: Add the HTTP Method with lambda integration
+    spaceResource.addMethod("POST", this.tableForSpaceFinder.createLambdaIntegration);
 
 
 

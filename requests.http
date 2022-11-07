@@ -2,3 +2,13 @@
 @endpoints = https://iy2qrkd4hh.execute-api.us-east-1.amazonaws.com/prod/
 
 GET {{endpoints}}/hello/
+###
+
+
+POST {{endpoints}}/spaces/
+Content-Type: application/json
+
+{
+    "location": "New Delhi",
+    "attachment": "Born Here"
+}
