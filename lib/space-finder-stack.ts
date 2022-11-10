@@ -19,6 +19,7 @@ export class SpaceFinderStack extends cdk.Stack {
     primaryKey: "SpaceFinderId",
     createLambdaPath: 'create',
     readLambdaPath: 'read',
+    updateLambdaPath: 'update',
     secondaryIndexes: ['location']
   
   }
@@ -63,6 +64,7 @@ export class SpaceFinderStack extends cdk.Stack {
     // todo: Add the HTTP Methods with lambda integration
     spaceResource.addMethod("POST", this.tableForSpaceFinder.createLambdaIntegration);
     spaceResource.addMethod("GET", this.tableForSpaceFinder.readLambdaIntegration);
+    spaceResource.addMethod("PUT", this.tableForSpaceFinder.updateLambdaIntegration);
 
 
 
