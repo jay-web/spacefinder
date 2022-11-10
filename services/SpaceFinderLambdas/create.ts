@@ -6,6 +6,7 @@ import {v4} from "uuid";
 const TABLE_NAME = process.env.TABLE_NAME;
 const dbClient = new DynamoDB.DocumentClient({ region: 'us-east-1'});
 
+// ? Main lambda handler function to add the data into dynamoDB table
 
 async function handler(event:APIGatewayProxyEvent, context: Context): Promise<APIGatewayProxyResult> {
 

@@ -5,13 +5,21 @@ import { handler as readTable } from "../../services/SpaceFinderLambdas/read";
 
 // handler({}, {});
 
+// * Event with Secondary key as queryString , like location 
 const event: APIGatewayProxyEvent = {
     queryStringParameters: {
-        'SpaceFinderId': 'f31dfb60-b8a8-4f80-b4e8-98bb72bc6b74'
+        'location': 'New Delhi India'
     }
 } as any;
 
-// * To create new space
+// * Event with primary key as queryString
+// const event: APIGatewayProxyEvent = {
+//     queryStringParameters: {
+//         'SpaceFinderId': 'f31dfb60-b8a8-4f80-b4e8-98bb72bc6b74'
+//     }
+// } as any;
+
+// *  Event To create new space
 // const event = {
 //     body:{
 //         location: "New Delhi India",
@@ -19,8 +27,12 @@ const event: APIGatewayProxyEvent = {
 //     }
 // }
 
+// * Call createItem handler
 // createItem(event as any, {} as any)
 
+
+
+// * Call readTable handler
 readTable(event, {} as any).then((apiResult) => {
     const items = JSON.parse(apiResult.body);
     console.log(2323)
