@@ -21,3 +21,12 @@ Content-Type: application/json
     "location": "New Delhi",
     "attachment": "Born Here"
 }
+###
+
+PUT {{endpoints}}/spaces?SpaceFinderId=f31dfb60-b8a8-4f80-b4e8-98bb72bc6b74
+Content-Type: application/json
+
+{
+    "place": "Palam Colony, Raj Nagar",
+    
+}
