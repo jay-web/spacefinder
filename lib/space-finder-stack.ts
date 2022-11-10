@@ -17,7 +17,8 @@ export class SpaceFinderStack extends cdk.Stack {
   private tableForSpaceFinder = new GenericTable(this, {
     tableName: "tableForSpaceFinder", 
     primaryKey: "SpaceFinderId",
-    createLambdaPath: 'create'
+    createLambdaPath: 'create',
+    readLambdaPath: 'read'
   
   }
     );
@@ -57,8 +58,10 @@ export class SpaceFinderStack extends cdk.Stack {
 
     // todo: Add the Space resource to api
     const spaceResource = this.api.root.addResource("spaces");
-    // todo: Add the HTTP Method with lambda integration
+
+    // todo: Add the HTTP Methods with lambda integration
     spaceResource.addMethod("POST", this.tableForSpaceFinder.createLambdaIntegration);
+    spaceResource.addMethod("GET", this.tableForSpaceFinder.readLambdaIntegration);
 
 
 
