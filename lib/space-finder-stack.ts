@@ -18,7 +18,8 @@ export class SpaceFinderStack extends cdk.Stack {
     tableName: "tableForSpaceFinder", 
     primaryKey: "SpaceFinderId",
     createLambdaPath: 'create',
-    readLambdaPath: 'read'
+    readLambdaPath: 'read',
+    secondaryIndexes: ['location']
   
   }
     );

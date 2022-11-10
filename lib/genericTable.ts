@@ -10,7 +10,8 @@ export interface TableProps {
     createLambdaPath?: string,
     readLambdaPath?: string,
     updateLambdaPath?: string,
-    deleteLambdaPath?: string
+    deleteLambdaPath?: string,
+    secondaryIndexes?: string[]        // ? For query 
 }
 
 export class GenericTable {
@@ -38,6 +39,7 @@ export class GenericTable {
 
     private initialize(){
         this.createTable();
+        this.addSecondaryIndexes();
         this.createLambdas();
         this.grantTableRight();
     }
@@ -50,6 +52,22 @@ export class GenericTable {
             },
             tableName: this.props.tableName
         })
+    }
+
+    // todo: Add the secondary indexes if available to query into the table using them
+
+    private addSecondaryIndexes(){
+        if(this.props.secondaryIndexes){
+            for (let index of this.props.secondaryIndexes) {
+                this.table.addGlobalSecondaryIndex({
+                    partitionKey: {
+                        name: index,
+                        type: aws_dynamodb.AttributeType.STRING
+                    },
+                    indexName: index
+                })
+            }
+        }
     }
     
     // todo: Grant table right to lambdas function to take their respective actions
