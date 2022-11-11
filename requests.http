@@ -1,5 +1,5 @@
 
-@endpoints = https://iy2qrkd4hh.execute-api.us-east-1.amazonaws.com/prod/
+@endpoints = https://9s7cwk8oni.execute-api.us-east-1.amazonaws.com/prod/
 
 GET {{endpoints}}/hello/
 ###
@@ -8,7 +8,7 @@ GET {{endpoints}}/hello/
 GET {{endpoints}}/spaces
 ###
 
-GET {{endpoints}}/spaces?SpaceFinderId=f31dfb60-b8a8-4f80-b4e8-98bb72bc6b74
+GET {{endpoints}}/spaces?spaceId=f31dfb60-b8a8-4f80-b4e8-98bb72bc6b74
 ###
 
 GET {{endpoints}}/spaces?location="New Delhi India"
@@ -18,12 +18,12 @@ POST {{endpoints}}/spaces/
 Content-Type: application/json
 
 {
-    "location": "New Delhi",
-    "attachment": "My Birth Place"
+    
+    "name": "My Birth Place"
 }
 ###
 
-PUT {{endpoints}}/spaces?SpaceFinderId=f31dfb60-b8a8-4f80-b4e8-98bb72bc6b74
+PUT {{endpoints}}/spaces?spaceId=f31dfb60-b8a8-4f80-b4e8-98bb72bc6b74
 Content-Type: application/json
 
 {
@@ -32,5 +32,5 @@ Content-Type: application/json
 }
 ###
 
-DELETE {{endpoints}}/spaces?SpaceFinderId=8c7f44ff-fc18-44fa-8a2c-c3fa2e28eaa4
+DELETE {{endpoints}}/spaces?spaceId=y9go7vp0kbc
 Content-Type: application/json

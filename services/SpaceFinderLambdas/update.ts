@@ -1,5 +1,6 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
 import {DynamoDB} from 'aws-sdk';
+import { generateRequestBody } from '../../utils/generateRequestBody';
 
 
 
@@ -15,7 +16,7 @@ async function handler(event: APIGatewayProxyEvent, context: Context): Promise<A
         body: "Hello from Update lambda"
     }
 
-    const requestBody = typeof event.body == 'object' ? event.body : JSON.parse(event.body);
+    const requestBody = generateRequestBody(event);
     const spaceId = event.queryStringParameters?.[PRIMARY_KEY!];
 
     try {
@@ -42,6 +43,7 @@ async function handler(event: APIGatewayProxyEvent, context: Context): Promise<A
         }
     } catch (error) {
         if(error instanceof Error){
+            result.statusCode = 500;
             result.body = error.message;
         }
     }

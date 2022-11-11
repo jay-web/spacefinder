@@ -17,8 +17,8 @@
             ],
             "env": {
                 "region": "us-east-1",
-                "TABLE_NAME": "tableForSpaceFinder",
-                "PRIMARY_KEY": "SpaceFinderId"
+                "TABLE_NAME": "spaceFinder",
+                "PRIMARY_KEY": "spaceId"
             }
         }
     ]

@@ -14,9 +14,9 @@ export class SpaceFinderStack extends cdk.Stack {
   private api = new RestApi(this, 'SpaceFinderApi');
 
   // todo: Create Dynamo DB Table
-  private tableForSpaceFinder = new GenericTable(this, {
-    tableName: "tableForSpaceFinder", 
-    primaryKey: "SpaceFinderId",
+  private spaceFinder = new GenericTable(this, {
+    tableName: "spaceFinder", 
+    primaryKey: "spaceId",
     createLambdaPath: 'create',           // ? Create lambda handler file path
     readLambdaPath: 'read',               // ? Read lambda handler file path
     updateLambdaPath: 'update',           // ? Update lambda handler file path
@@ -63,10 +63,10 @@ export class SpaceFinderStack extends cdk.Stack {
     const spaceResource = this.api.root.addResource("spaces");
 
     // todo: Add the HTTP Methods with lambda integration
-    spaceResource.addMethod("POST", this.tableForSpaceFinder.createLambdaIntegration);
-    spaceResource.addMethod("GET", this.tableForSpaceFinder.readLambdaIntegration);
-    spaceResource.addMethod("PUT", this.tableForSpaceFinder.updateLambdaIntegration);
-    spaceResource.addMethod("DELETE", this.tableForSpaceFinder.deleteLambdaIntegration);
+    spaceResource.addMethod("POST", this.spaceFinder.createLambdaIntegration);
+    spaceResource.addMethod("GET", this.spaceFinder.readLambdaIntegration);
+    spaceResource.addMethod("PUT", this.spaceFinder.updateLambdaIntegration);
+    spaceResource.addMethod("DELETE", this.spaceFinder.deleteLambdaIntegration);
 
 
 
