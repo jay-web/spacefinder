@@ -17,9 +17,10 @@ export class SpaceFinderStack extends cdk.Stack {
   private tableForSpaceFinder = new GenericTable(this, {
     tableName: "tableForSpaceFinder", 
     primaryKey: "SpaceFinderId",
-    createLambdaPath: 'create',
-    readLambdaPath: 'read',
-    updateLambdaPath: 'update',
+    createLambdaPath: 'create',           // ? Create lambda handler file path
+    readLambdaPath: 'read',               // ? Read lambda handler file path
+    updateLambdaPath: 'update',           // ? Update lambda handler file path
+    deleteLambdaPath: 'delete',           // ? Delete lambda handler file path
     secondaryIndexes: ['location']
   
   }
@@ -65,6 +66,7 @@ export class SpaceFinderStack extends cdk.Stack {
     spaceResource.addMethod("POST", this.tableForSpaceFinder.createLambdaIntegration);
     spaceResource.addMethod("GET", this.tableForSpaceFinder.readLambdaIntegration);
     spaceResource.addMethod("PUT", this.tableForSpaceFinder.updateLambdaIntegration);
+    spaceResource.addMethod("DELETE", this.tableForSpaceFinder.deleteLambdaIntegration);
 
 
 

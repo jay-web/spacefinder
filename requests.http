@@ -19,7 +19,7 @@ Content-Type: application/json
 
 {
     "location": "New Delhi",
-    "attachment": "Born Here"
+    "attachment": "My Birth Place"
 }
 ###
 
@@ -30,3 +30,7 @@ Content-Type: application/json
     "place": "Palam Colony, Raj Nagar"
     
 }
+###
+
+DELETE {{endpoints}}/spaces?SpaceFinderId=8c7f44ff-fc18-44fa-8a2c-c3fa2e28eaa4
+Content-Type: application/json
