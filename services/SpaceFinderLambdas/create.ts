@@ -1,4 +1,4 @@
-import  { DynamoDB } from 'aws-sdk';
+import  { APIGateway, DynamoDB } from 'aws-sdk';
 import { APIGatewayProxyEvent, APIGatewayProxyResult, Context} from 'aws-lambda';
 
 import { generateRandomId } from '../../utils/generateRandomId';
@@ -17,6 +17,11 @@ async function handler(event:APIGatewayProxyEvent, context: Context): Promise<AP
         body: "Hello from lambda db creation"
     }
 
+    if(!isAuthorizedToCreateSpace(event)){
+        result.statusCode = 401,
+        result.body = "You are NOT authorized to create new space 🔐";
+        return result;
+    }
     
     try{
         // todo: set the item using REQUEST body
@@ -28,7 +33,8 @@ async function handler(event:APIGatewayProxyEvent, context: Context): Promise<AP
             Item: item
         }).promise()
 
-        result.body = `Created item with id ${item.spaceId}`
+        result.body = `Created item with id ${item.spaceId} `
+        
     }catch(error){
         if(error instanceof Error){
             if (error instanceof MissingFieldError) {
@@ -44,6 +50,17 @@ async function handler(event:APIGatewayProxyEvent, context: Context): Promise<AP
     
 
     return result;
+}
+
+// ? Helper function to check whether user is from admin group or not
+
+function isAuthorizedToCreateSpace(event: APIGatewayProxyEvent) {
+    const group = event.requestContext.authorizer?.claims['cognito:groups'];
+    if(group){
+        return (group as string).includes('admin')
+    }else{
+        return false;
+    }
 }
 
 

@@ -1,6 +1,6 @@
 import { CfnOutput } from "aws-cdk-lib";
 import { CognitoUserPoolsAuthorizer, RestApi } from "aws-cdk-lib/aws-apigateway";
-import { UserPool, UserPoolClient } from "aws-cdk-lib/aws-cognito";
+import { UserPool, UserPoolClient, CfnUserPoolGroup } from "aws-cdk-lib/aws-cognito";
 import { Construct } from "constructs";
 
 export class AuthorizerWrapper {
@@ -21,8 +21,10 @@ export class AuthorizerWrapper {
         this.createUserPool();
         this.addUserPoolClient();
         this.createAuthorizer();
+        this.createUserGroup();
     }
 
+    // todo : To create the user pool for our users
     private createUserPool(){
         this.userPool = new UserPool(this.scope, "SpaceUserPool", {
             userPoolName: "SpaceUserPool",
@@ -33,11 +35,13 @@ export class AuthorizerWrapper {
             }
         });
 
+        // todo: To console the user pool id at the time of deployment
         new CfnOutput(this.scope, "UserPoolId", {
             value: this.userPool.userPoolId
         })
     }
 
+    // todo: To add the user pool client to our user pool
     private addUserPoolClient(){
         this.userPoolClient = this.userPool.addClient("SpaceUserPool-client", {
             userPoolClientName: "SpaceUserPool-client",
@@ -50,11 +54,13 @@ export class AuthorizerWrapper {
             generateSecret: false
         });
 
+        // todo: Just to console the userpool client id at deployment
         new CfnOutput(this.scope, "UserPoolClientId", {
             value: this.userPoolClient.userPoolClientId
         });
     }
 
+    // todo: to create the authorizer to integrate with api
     private createAuthorizer(){
         this.authorizer = new CognitoUserPoolsAuthorizer(this.scope, "SpaceUserAuthorizer", {
             cognitoUserPools: [this.userPool],
@@ -64,6 +70,13 @@ export class AuthorizerWrapper {
         });
         this.authorizer._attachToApi(this.api);
 
-      
+    }
+
+    // todo: To create the user group
+    private createUserGroup(){
+        new CfnUserPoolGroup(this.scope, "admin", {
+            groupName: "admin",
+            userPoolId: this.userPool.userPoolId
+        })
     }
 }

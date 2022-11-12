@@ -35,7 +35,8 @@ import { handler as deleteItem } from "../../services/SpaceFinderLambdas/delete"
 // *  Event To create new space
 const event:APIGatewayProxyEvent = {
     body:{
-        name: "Testing"
+        name: "Testing",
+        location:"America"
     }
 } as any;
 
