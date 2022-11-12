@@ -4,14 +4,17 @@ import { Construct } from 'constructs';
 // import {join} from 'path';
 // import {Code, Function as LambdaFunction, Runtime } from 'aws-cdk-lib/aws-lambda';
 
-import { LambdaIntegration, RestApi } from 'aws-cdk-lib/aws-apigateway';
+import { AuthorizationType, LambdaIntegration, MethodOptions, RestApi } from 'aws-cdk-lib/aws-apigateway';
 import { GenericTable } from './genericTable';
 // import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 // import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
+import { AuthorizerWrapper } from './auth/authorizerWrapper';
+
 
 export class SpaceFinderStack extends cdk.Stack {
   // todo: Create instance of restapi from aws gateway api
   private api = new RestApi(this, 'SpaceFinderApi');
+  private authorizer: AuthorizerWrapper;
 
   // todo: Create Dynamo DB Table
   private spaceFinder = new GenericTable(this, {
@@ -28,6 +31,8 @@ export class SpaceFinderStack extends cdk.Stack {
 
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
+
+    this.authorizer = new AuthorizerWrapper(this, this.api);
 
     // todo: Create lambda function
     // const helloLambda = new LambdaFunction(this, 'helloLambda', {
@@ -59,14 +64,23 @@ export class SpaceFinderStack extends cdk.Stack {
 
     // ? ----------Example code ends =====
 
+    // todo: Create authorizer and attach the same at line 72 - 76 to our api request
+
+    const optionsWithAuthoizer: MethodOptions = {
+      authorizationType: AuthorizationType.COGNITO,
+      authorizer: {
+        authorizerId: this.authorizer.authorizer.authorizerId
+      }
+    }
+
     // todo: Add the Space resource to api
     const spaceResource = this.api.root.addResource("spaces");
 
     // todo: Add the HTTP Methods with lambda integration
-    spaceResource.addMethod("POST", this.spaceFinder.createLambdaIntegration);
-    spaceResource.addMethod("GET", this.spaceFinder.readLambdaIntegration);
-    spaceResource.addMethod("PUT", this.spaceFinder.updateLambdaIntegration);
-    spaceResource.addMethod("DELETE", this.spaceFinder.deleteLambdaIntegration);
+    spaceResource.addMethod("POST", this.spaceFinder.createLambdaIntegration, optionsWithAuthoizer);
+    spaceResource.addMethod("GET", this.spaceFinder.readLambdaIntegration, optionsWithAuthoizer);
+    spaceResource.addMethod("PUT", this.spaceFinder.updateLambdaIntegration, optionsWithAuthoizer);
+    spaceResource.addMethod("DELETE", this.spaceFinder.deleteLambdaIntegration, optionsWithAuthoizer);
 
 
 

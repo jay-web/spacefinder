@@ -1,4 +1,4 @@
-
+@token = eyJraWQiOiJEbUQ4SUc0V2RkYkhrdlcrb3NBbGFwOFB3dVBoY09BYkREaHlKVXdsdDlrPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiIwYTEyNWUzNC0yOGNlLTRkZGYtYTcwMS04NDJiNWE4NGNhNDAiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiaXNzIjoiaHR0cHM6XC9cL2NvZ25pdG8taWRwLnVzLWVhc3QtMS5hbWF6b25hd3MuY29tXC91cy1lYXN0LTFfRnRBYk5HRDlyIiwiY29nbml0bzp1c2VybmFtZSI6IkpheV9zaGFybWExMiIsIm9yaWdpbl9qdGkiOiJkODI2MGM1MS00NzI3LTQ0ZjQtYmI5OC0zZmNmNGE5ODJkNmUiLCJhdWQiOiI1cmkzYWVnMHAyMnZtbzdqc29mZGgwZmJmZSIsImV2ZW50X2lkIjoiODkyYjM0OTUtOTQwNi00NjUyLTg1NjUtM2JhOTUyMDAxZDc1IiwidG9rZW5fdXNlIjoiaWQiLCJhdXRoX3RpbWUiOjE2NjgyNzAwMjMsImV4cCI6MTY2ODI3MzYyMywiaWF0IjoxNjY4MjcwMDIzLCJqdGkiOiI5NjRiNmQ0Mi05MmM1LTQzM2UtYmQ5Ny02NWJlZTdhMGEwNjkiLCJlbWFpbCI6ImpheS5kZXZlbG9wZXIxMkBnbWFpbC5jb20ifQ.XMp5ebZwaspYiF7YkxcUiwBI141LcRbiudlTTxUHKVpqSEQz-MOo631pCDZDXWGgUigiAosl1imprgIS-CDfzmV7av_LODkitEv-QGH4YeyNRChUNDA5ri05BWQG61S-WvFcDVcjEuewFn7jehEwewlvaHjATOs4Ils0m8zs4l57QvKIaVs_UckOREFKLrqiEnndHcApHa2nCCp4MONpnbiCPeNyncJa5_5ATm4Io_LhRqJdwEDSljRpyF3ySwmG7z7S9-cFo1_qjwHZjiW9dUEygKsm46Lh13486YWp-UXNg_BZQZ2RnAeO2393P4ZGagU6eLZEj1x-iZCSVvslcA
 @endpoints = https://9s7cwk8oni.execute-api.us-east-1.amazonaws.com/prod/
 
 GET {{endpoints}}/hello/
@@ -6,12 +6,15 @@ GET {{endpoints}}/hello/
 
 
 GET {{endpoints}}/spaces
+Authorization: {{token}}
 ###
 
-GET {{endpoints}}/spaces?spaceId=f31dfb60-b8a8-4f80-b4e8-98bb72bc6b74
+GET {{endpoints}}/spaces?spaceId=sm5s2rngup
+Authorization: {{token}}
 ###
 
 GET {{endpoints}}/spaces?location="New Delhi India"
+Authorization: {{token}}
 ###
 
 POST {{endpoints}}/spaces/
@@ -19,7 +22,8 @@ Content-Type: application/json
 
 {
     
-    "name": "My Birth Place"
+    "name": "My School",
+    "location": "Palam"
 }
 ###
 
