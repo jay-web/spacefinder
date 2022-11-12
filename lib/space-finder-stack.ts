@@ -1,13 +1,13 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 // import * as sqs from 'aws-cdk-lib/aws-sqs';'
-import {join} from 'path';
-import {Code, Function as LambdaFunction, Runtime } from 'aws-cdk-lib/aws-lambda';
+// import {join} from 'path';
+// import {Code, Function as LambdaFunction, Runtime } from 'aws-cdk-lib/aws-lambda';
 
 import { LambdaIntegration, RestApi } from 'aws-cdk-lib/aws-apigateway';
 import { GenericTable } from './genericTable';
-import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
-import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
+// import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
+// import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
 
 export class SpaceFinderStack extends cdk.Stack {
   // todo: Create instance of restapi from aws gateway api
