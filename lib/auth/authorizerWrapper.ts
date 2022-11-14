@@ -2,6 +2,7 @@ import { CfnOutput } from "aws-cdk-lib";
 import { CognitoUserPoolsAuthorizer, RestApi } from "aws-cdk-lib/aws-apigateway";
 import { UserPool, UserPoolClient, CfnUserPoolGroup } from "aws-cdk-lib/aws-cognito";
 import { Construct } from "constructs";
+import { IdentityPoolWrapper } from "./identityPoolWrapper";
 
 export class AuthorizerWrapper {
     private scope: Construct;
@@ -10,6 +11,7 @@ export class AuthorizerWrapper {
     private userPool: UserPool;
     private userPoolClient : UserPoolClient;
     public authorizer: CognitoUserPoolsAuthorizer;
+    private identityPoolWrapper: IdentityPoolWrapper;
 
     constructor(scope: Construct, api: RestApi){
         this.scope = scope;
@@ -21,7 +23,9 @@ export class AuthorizerWrapper {
         this.createUserPool();
         this.addUserPoolClient();
         this.createAuthorizer();
+        this.initializeIdentityPoolWrapper();
         this.createUserGroup();
+       
     }
 
     // todo : To create the user pool for our users
@@ -72,11 +76,17 @@ export class AuthorizerWrapper {
 
     }
 
+    // todo: Initilize identity pool wrapper created in identityPoolWrapper class (if required)
+    private initializeIdentityPoolWrapper(){
+        this.identityPoolWrapper = new IdentityPoolWrapper(this.scope, this.userPool, this.userPoolClient);
+    }
+
     // todo: To create the user group
     private createUserGroup(){
         new CfnUserPoolGroup(this.scope, "admin", {
             groupName: "admin",
-            userPoolId: this.userPool.userPoolId
+            userPoolId: this.userPool.userPoolId,
+            roleArn: this.identityPoolWrapper.adminRole.roleArn  // ? Note: Need to create this role in identity pool
         })
     }
 }
