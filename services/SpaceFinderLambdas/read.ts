@@ -5,6 +5,7 @@ import {
   APIGatewayProxyResult,
   Context,
 } from "aws-lambda";
+import { corsHandler } from "../../utils/corsHandler";
 
 const TABLE_NAME = process.env.TABLE_NAME;
 const PRIMARY_KEY = process.env.PRIMARY_KEY;
@@ -19,6 +20,7 @@ async function handler(event: APIGatewayProxyEvent, context: Context): Promise<A
     body: "Hello from DynamoDB",
   };
 
+  corsHandler(result);
   try {
     // todo: If query string is available in event object
     if (event.queryStringParameters) {

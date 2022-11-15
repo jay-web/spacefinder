@@ -1,5 +1,6 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
 import {DynamoDB} from 'aws-sdk';
+import { corsHandler } from '../../utils/corsHandler';
 
 const TABLE_NAME = process.env.TABLE_NAME;
 const PRIMARY_KEY = process.env.PRIMARY_KEY;
@@ -13,6 +14,7 @@ async function handler(event:APIGatewayProxyEvent, context: Context): Promise<AP
         body: "Hello from delete lambda"
     }
 
+    corsHandler(result);
     const spaceID = event.queryStringParameters?.[PRIMARY_KEY!];
 
     try {

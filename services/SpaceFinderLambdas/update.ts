@@ -1,5 +1,6 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
 import {DynamoDB} from 'aws-sdk';
+import { corsHandler } from '../../utils/corsHandler';
 import { generateRequestBody } from '../../utils/generateRequestBody';
 
 
@@ -15,6 +16,7 @@ async function handler(event: APIGatewayProxyEvent, context: Context): Promise<A
         statusCode: 200,
         body: "Hello from Update lambda"
     }
+    corsHandler(result);
 
     const requestBody = generateRequestBody(event);
     const spaceId = event.queryStringParameters?.[PRIMARY_KEY!];

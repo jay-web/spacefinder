@@ -4,6 +4,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult, Context} from 'aws-lambda'
 import { generateRandomId } from '../../utils/generateRandomId';
 import { InputValidator, MissingFieldError } from '../../utils/inputValidators';
 import { generateRequestBody } from "../../utils/generateRequestBody";
+import { corsHandler } from '../../utils/corsHandler';
 
 const TABLE_NAME = process.env.TABLE_NAME;
 const dbClient = new DynamoDB.DocumentClient({ region: 'us-east-1'});
@@ -16,6 +17,9 @@ async function handler(event:APIGatewayProxyEvent, context: Context): Promise<AP
         statusCode: 200,
         body: "Hello from lambda db creation"
     }
+
+
+    corsHandler(result);
 
     if(!isAuthorizedToCreateSpace(event)){
         result.statusCode = 401,
