@@ -9,12 +9,18 @@ import { GenericTable } from './genericTable';
 // import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 // import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { AuthorizerWrapper } from './auth/authorizerWrapper';
+import { CfnOutput, Fn } from 'aws-cdk-lib';
+import { Bucket, HttpMethods } from 'aws-cdk-lib/aws-s3';
+
+
 
 
 export class SpaceFinderStack extends cdk.Stack {
   // todo: Create instance of restapi from aws gateway api
   private api = new RestApi(this, 'SpaceFinderApi');
   private authorizer: AuthorizerWrapper;
+  private suffix: string;
+  private spacesPhotoBucket : Bucket;
 
   // todo: Create Dynamo DB Table
   private spaceFinder = new GenericTable(this, {
@@ -33,6 +39,9 @@ export class SpaceFinderStack extends cdk.Stack {
     super(scope, id, props);
 
     this.authorizer = new AuthorizerWrapper(this, this.api);
+
+    this.initializeSuffix();
+    this.initializePhotoBucket();
 
     // todo: Create lambda function
     // const helloLambda = new LambdaFunction(this, 'helloLambda', {
@@ -84,5 +93,35 @@ export class SpaceFinderStack extends cdk.Stack {
 
 
 
+  }
+
+  // todo: Create suffix to add to the s3 bucket name for the photos to make it unique
+  // ? Just extracting last digits of the stack id and using that as suffix
+  private initializeSuffix() {
+    const shortStackId = Fn.select(2, Fn.split('/', this.stackId));
+    const Suffix = Fn.select(4, Fn.split('-', shortStackId));
+    this.suffix = Suffix;
+  }
+
+  // todo: Initialize s3 bucket to store spaces photos
+  private initializePhotoBucket(){
+    this.spacesPhotoBucket = new Bucket(this, 'spaces-photos', {
+      bucketName: 'spaces-photos-' + this.suffix,
+      cors:[
+        {
+          allowedMethods:[
+            HttpMethods.GET,
+            HttpMethods.PUT,
+            HttpMethods.HEAD
+          ],
+          allowedOrigins:['*'],
+          allowedHeaders:['*']
+        }
+      ]
+    });
+
+    new CfnOutput(this, "spaces-photos-bucket-name", {
+      value: this.spacesPhotoBucket.bucketName
+    })
   }
 }
