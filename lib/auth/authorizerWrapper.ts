@@ -12,10 +12,12 @@ export class AuthorizerWrapper {
     private userPoolClient : UserPoolClient;
     public authorizer: CognitoUserPoolsAuthorizer;
     private identityPoolWrapper: IdentityPoolWrapper;
+    private photoBucketArn: string;
 
-    constructor(scope: Construct, api: RestApi){
+    constructor(scope: Construct, api: RestApi, photoBucketArn: string){
         this.scope = scope;
         this.api = api;
+        this.photoBucketArn = photoBucketArn;
         this.initialize();
     }
 
@@ -78,7 +80,12 @@ export class AuthorizerWrapper {
 
     // todo: Initilize identity pool wrapper created in identityPoolWrapper class (if required)
     private initializeIdentityPoolWrapper(){
-        this.identityPoolWrapper = new IdentityPoolWrapper(this.scope, this.userPool, this.userPoolClient);
+        this.identityPoolWrapper = new IdentityPoolWrapper(
+                this.scope, 
+                this.userPool, 
+                this.userPoolClient,
+                this.photoBucketArn + "/*"
+                );
     }
 
     // todo: To create the user group

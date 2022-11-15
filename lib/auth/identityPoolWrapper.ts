@@ -13,11 +13,13 @@ export class IdentityPoolWrapper {
     private authenticatedRole: Role;
     private unAuthenticatedRole: Role;
     public adminRole: Role;
+    private photoBucketArn: string;
 
-    constructor(scope:Construct, userPool: UserPool, userPoolClient: UserPoolClient){
+    constructor(scope:Construct, userPool: UserPool, userPoolClient: UserPoolClient, photoBucketArn: string){
         this.scope = scope;
         this.userPool = userPool;
         this.userPoolClient = userPoolClient;
+        this.photoBucketArn = photoBucketArn;
         this.initialize();
     }
 
@@ -107,8 +109,8 @@ export class IdentityPoolWrapper {
         // todo: Below we will add some priviledges to this role, like able to list s3 buckets
         this.adminRole.addToPolicy(new PolicyStatement({
             effect: Effect.ALLOW,
-            actions:['s3:ListAllMyBuckets'],
-            resources:['*']
+            actions:['s3:PutObject', 's3:PutObjectAcl'],
+            resources:[this.photoBucketArn]
         }))
 
     }

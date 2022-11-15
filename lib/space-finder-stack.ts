@@ -37,11 +37,9 @@ export class SpaceFinderStack extends cdk.Stack {
 
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
-
-    this.authorizer = new AuthorizerWrapper(this, this.api);
-
     this.initializeSuffix();
     this.initializePhotoBucket();
+    this.authorizer = new AuthorizerWrapper(this, this.api, this.spacesPhotoBucket.bucketArn);
 
     // todo: Create lambda function
     // const helloLambda = new LambdaFunction(this, 'helloLambda', {
