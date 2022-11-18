@@ -4,14 +4,14 @@ import { Construct } from 'constructs';
 // import {join} from 'path';
 // import {Code, Function as LambdaFunction, Runtime } from 'aws-cdk-lib/aws-lambda';
 
-import { AuthorizationType, LambdaIntegration, MethodOptions, RestApi } from 'aws-cdk-lib/aws-apigateway';
+import { AuthorizationType, Cors, LambdaIntegration, MethodOptions, ResourceOptions, RestApi } from 'aws-cdk-lib/aws-apigateway';
 import { GenericTable } from './genericTable';
 // import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 // import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { AuthorizerWrapper } from './auth/authorizerWrapper';
 import { CfnOutput, Fn } from 'aws-cdk-lib';
 import { Bucket, HttpMethods } from 'aws-cdk-lib/aws-s3';
-
+import { WebAppDeployment } from './webAppDeployment';
 
 
 
@@ -40,6 +40,7 @@ export class SpaceFinderStack extends cdk.Stack {
     this.initializeSuffix();
     this.initializePhotoBucket();
     this.authorizer = new AuthorizerWrapper(this, this.api, this.spacesPhotoBucket.bucketArn);
+    new WebAppDeployment(this, this.suffix);
 
     // todo: Create lambda function
     // const helloLambda = new LambdaFunction(this, 'helloLambda', {
@@ -80,8 +81,25 @@ export class SpaceFinderStack extends cdk.Stack {
       }
     }
 
+    // todo: Options with cors
+    const optionsWithCors: ResourceOptions = {
+      defaultCorsPreflightOptions:{
+        allowHeaders: [
+          'Content-Type',
+          'X-Amz-Date',
+          'Authorization',
+          'X-Api-Key',
+        ],
+        allowMethods: ['OPTIONS', 'GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+        allowCredentials: true,
+        allowOrigins: ['http://localhost:3000', 'http://space-finder-web-0eb832199ad3.s3-website-us-east-1.amazonaws.com'],
+      },
+      
+
+    }
+
     // todo: Add the Space resource to api
-    const spaceResource = this.api.root.addResource("spaces");
+    const spaceResource = this.api.root.addResource("spaces", optionsWithCors);
 
     // todo: Add the HTTP Methods with lambda integration
     spaceResource.addMethod("POST", this.spaceFinder.createLambdaIntegration, optionsWithAuthoizer);

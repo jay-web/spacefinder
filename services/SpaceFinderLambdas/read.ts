@@ -15,12 +15,14 @@ const dbClient = new DynamoDB.DocumentClient({ region: "us-east-1" });
 // ? Main lambda handler function to read the data from dynamoDB
 
 async function handler(event: APIGatewayProxyEvent, context: Context): Promise<APIGatewayProxyResult> {
+  
   const result: APIGatewayProxyResult = {
     statusCode: 200,
     body: "Hello from DynamoDB",
   };
 
   corsHandler(result);
+ 
   try {
     // todo: If query string is available in event object
     if (event.queryStringParameters) {
@@ -37,6 +39,7 @@ async function handler(event: APIGatewayProxyEvent, context: Context): Promise<A
       result.body = await scanTable(); // ? declared at line 51
     }
   } catch (error) {
+    
     if (error instanceof Error) {
       result.statusCode = 500;
       result.body = error.message;

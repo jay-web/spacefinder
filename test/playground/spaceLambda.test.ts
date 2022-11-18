@@ -33,30 +33,30 @@ import { handler as deleteItem } from "../../services/SpaceFinderLambdas/delete"
 // } as any;
 
 // *  Event To create new space
-const event:APIGatewayProxyEvent = {
-    body:{
-        name: "Testing",
-        location:"America"
-    }
-} as any;
+// const event:APIGatewayProxyEvent = {
+//     body:{
+//         name: "Testing",
+//         location:"America"
+//     }
+// } as any;
 
 // * Call createItem handler
 // createItem(event as any, {} as any)
 
 // * Call to delete data
 
-createItem(event , {} as any).then((apiResult) => {
-    const result = JSON.parse(apiResult.body);
-    console.log(2323)
-})
+// createItem(event , {} as any).then((apiResult) => {
+//     const result = JSON.parse(apiResult.body);
+//     console.log(2323)
+// })
 
 
 
 // * Call readTable handler
-// readTable(event, {} as any).then((apiResult) => {
-//     const items = JSON.parse(apiResult.body);
-//     console.log(2323)
-// })
+readTable({} as any, {} as any).then((apiResult) => {
+    const items = JSON.parse(apiResult.body);
+    console.log(2323)
+})
 
 // const event: APIGatewayProxyEvent = {
 //     queryStringParameters :{
