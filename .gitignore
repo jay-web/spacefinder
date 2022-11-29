@@ -2,8 +2,8 @@
 !jest.config.js
 *.d.ts
 node_modules
-.http
 config.ts
 # CDK asset staging directory
 .cdk.staging
 cdk.out
+requests.http
