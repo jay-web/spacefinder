@@ -7,6 +7,7 @@ import { join } from "path";
 export interface TableProps {
     tableName:string,
     primaryKey:string,
+    lambdaType: string,
     createLambdaPath?: string,
     readLambdaPath?: string,
     updateLambdaPath?: string,
@@ -45,7 +46,7 @@ export class GenericTable {
     }
 
     private createTable(){
-        this.table = new aws_dynamodb.Table(this.stack, 'SpaceFinderTable',{
+        this.table = new aws_dynamodb.Table(this.stack, this.props.tableName,{
             partitionKey: {
                 name: this.props.primaryKey,
                 type: aws_dynamodb.AttributeType.STRING
@@ -89,29 +90,29 @@ export class GenericTable {
     // todo: And then  Integrate it with api 
     private createLambdas(){
         if(this.props.createLambdaPath){
-            this.createLambda = this.createSingleLambda(this.props.createLambdaPath);
+            this.createLambda = this.createSingleLambda(this.props.createLambdaPath, this.props.lambdaType);
             this.createLambdaIntegration = new LambdaIntegration(this.createLambda)
         }
         if(this.props.readLambdaPath){
-            this.readLambda = this.createSingleLambda(this.props.readLambdaPath);
+            this.readLambda = this.createSingleLambda(this.props.readLambdaPath,this.props.lambdaType);
             this.readLambdaIntegration = new LambdaIntegration(this.readLambda);
         }
         if(this.props.updateLambdaPath){
-            this.updateLambda = this.createSingleLambda(this.props.updateLambdaPath);
+            this.updateLambda = this.createSingleLambda(this.props.updateLambdaPath, this.props.lambdaType);
             this.updateLambdaIntegration = new LambdaIntegration(this.updateLambda);
         }
         if(this.props.deleteLambdaPath){
-            this.deleteLambda = this.createSingleLambda(this.props.deleteLambdaPath);
+            this.deleteLambda = this.createSingleLambda(this.props.deleteLambdaPath, this.props.lambdaType);
             this.deleteLambdaIntegration = new LambdaIntegration(this.deleteLambda);
         }
     }
 
     // todo: Create single function to create all types of lambdas
     // * @params - pass the handler file name only
-    private createSingleLambda(lambdaName: string): NodejsFunction {
+    private createSingleLambda(lambdaName: string, lambdaType: string): NodejsFunction {
         let lambdaId = `${this.props.tableName}-${lambdaName}`;
         return new NodejsFunction(this.stack, lambdaId, {
-            entry: join(__dirname,'..', 'services', 'SpaceFinderLambdas', lambdaName+'.ts'),
+            entry: join(__dirname,'..', 'services', 'Lambdas', lambdaType, lambdaName+'.ts'),
             handler: 'handler',
             functionName: lambdaId,
             environment:{

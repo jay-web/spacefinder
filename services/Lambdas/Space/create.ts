@@ -1,10 +1,10 @@
 import  { APIGateway, DynamoDB } from 'aws-sdk';
 import { APIGatewayProxyEvent, APIGatewayProxyResult, Context} from 'aws-lambda';
 
-import { generateRandomId } from '../../utils/generateRandomId';
-import { InputValidator, MissingFieldError } from '../../utils/inputValidators';
-import { generateRequestBody } from "../../utils/generateRequestBody";
-import { corsHandler } from '../../utils/corsHandler';
+import { generateRandomId } from '../../../utils/generateRandomId';
+import { SpaceInputValidator, MissingFieldError } from '../../../utils/inputValidators';
+import { generateRequestBody } from "../../../utils/generateRequestBody";
+import { corsHandler } from '../../../utils/corsHandler';
 
 const TABLE_NAME = process.env.TABLE_NAME;
 const dbClient = new DynamoDB.DocumentClient({ region: 'us-east-1'});
@@ -21,6 +21,7 @@ async function handler(event:APIGatewayProxyEvent, context: Context): Promise<AP
 
     corsHandler(result);
 
+    // todo: Check whether user is admin or not
     if(!isAuthorizedToCreateSpace(event)){
         result.statusCode = 401,
         result.body = "You are NOT authorized to create new space 🔐";
@@ -31,7 +32,7 @@ async function handler(event:APIGatewayProxyEvent, context: Context): Promise<AP
         // todo: set the item using REQUEST body
         const item = generateRequestBody(event);
         item.spaceId = generateRandomId();
-        InputValidator(item);
+        SpaceInputValidator(item);
         await dbClient.put({
             TableName: TABLE_NAME!,
             Item: item

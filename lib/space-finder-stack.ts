@@ -19,18 +19,32 @@ export class SpaceFinderStack extends cdk.Stack {
   private suffix: string;
   private spacesPhotoBucket : Bucket;
 
-  // todo: Create Dynamo DB Table
+  // todo: Create Dynamo DB Table for Space
   private spaceFinder = new GenericTable(this, {
-    tableName: "spaceFinder", 
-    primaryKey: "spaceId",
+    tableName: 'SpaceFinder', 
+    primaryKey: 'spaceId',
+    lambdaType: 'Space',
     createLambdaPath: 'create',           // ? Create lambda handler file path
     readLambdaPath: 'read',               // ? Read lambda handler file path
     updateLambdaPath: 'update',           // ? Update lambda handler file path
     deleteLambdaPath: 'delete',           // ? Delete lambda handler file path
     secondaryIndexes: ['location']
   
-  }
-    );
+  });
+
+  // todo: Create Dynamo DB Table for Reservation
+
+  private reservation = new GenericTable(this, {
+    tableName: 'spaceReservation',
+    primaryKey: 'reservationId',
+    lambdaType: 'Reservation',
+    createLambdaPath: 'create',           // ? Create lambda handler file path
+    readLambdaPath: 'read',               // ? Read lambda handler file path
+    updateLambdaPath: 'update',           // ? Update lambda handler file path
+    deleteLambdaPath: 'delete',           // ? Delete lambda handler file path
+    secondaryIndexes: ['spaceId']
+
+  })
 
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
@@ -70,11 +84,20 @@ export class SpaceFinderStack extends cdk.Stack {
     // todo: Add the Space resource to api
     const spaceResource = this.api.root.addResource("spaces", optionsWithCors);
 
-    // todo: Add the HTTP Methods with lambda integration
+    // todo: Add the REST Methods with lambda integration to Space resource
     spaceResource.addMethod("POST", this.spaceFinder.createLambdaIntegration, optionsWithAuthoizer);
     spaceResource.addMethod("GET", this.spaceFinder.readLambdaIntegration, optionsWithAuthoizer);
     spaceResource.addMethod("PUT", this.spaceFinder.updateLambdaIntegration, optionsWithAuthoizer);
     spaceResource.addMethod("DELETE", this.spaceFinder.deleteLambdaIntegration, optionsWithAuthoizer);
+
+    // todo: Add the Reservation resource to api
+    const reservationResource = this.api.root.addResource('reservation', optionsWithCors);
+
+    // todo: Add the REST Methods with lambda integration to Reservation resource
+    reservationResource.addMethod("GET", this.reservation.readLambdaIntegration, optionsWithAuthoizer);
+    reservationResource.addMethod("POST", this.reservation.createLambdaIntegration, optionsWithAuthoizer);
+    reservationResource.addMethod("PUT", this.reservation.updateLambdaIntegration, optionsWithAuthoizer);
+    reservationResource.addMethod("DELETE", this.reservation.deleteLambdaIntegration, optionsWithAuthoizer);
 
 
 

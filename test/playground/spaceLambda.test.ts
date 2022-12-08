@@ -1,9 +1,9 @@
 // import { handler } from "../../services/node-lambdas/hello";
 import { APIGatewayProxyEvent } from "aws-lambda";
-import { handler as createItem } from "../../services/SpaceFinderLambdas/create";
-import { handler as readTable } from "../../services/SpaceFinderLambdas/read";
-import { handler as updateData } from "../../services/SpaceFinderLambdas/update";
-import { handler as deleteItem } from "../../services/SpaceFinderLambdas/delete";
+import { handler as createItem } from "../../services/Lambdas/Space/create";
+import { handler as readTable } from "../../services/Lambdas/Space/read";
+import { handler as updateData } from "../../services/Lambdas//Space/update";
+import { handler as deleteItem } from "../../services/Lambdas/Space/delete";
 
 // handler({}, {});
 

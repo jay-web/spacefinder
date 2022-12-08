@@ -18,7 +18,9 @@
             "env": {
                 "region": "us-east-1",
                 "TABLE_NAME": "spaceFinder",
-                "PRIMARY_KEY": "spaceId"
+                "PRIMARY_KEY": "spaceId",
+                "RESERVATION_TABLE_NAME": "reservation",
+                "RESERVATION_PRIMARY_KEY": "reservationId"
             }
         }
     ]

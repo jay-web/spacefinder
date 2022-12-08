@@ -5,7 +5,7 @@ import {
   APIGatewayProxyResult,
   Context,
 } from "aws-lambda";
-import { corsHandler } from "../../utils/corsHandler";
+import { corsHandler } from "../../../utils/corsHandler";
 
 const TABLE_NAME = process.env.TABLE_NAME;
 const PRIMARY_KEY = process.env.PRIMARY_KEY;
@@ -22,6 +22,8 @@ async function handler(event: APIGatewayProxyEvent, context: Context): Promise<A
   };
 
   corsHandler(result);
+
+  console.log("event ", event.requestContext.authorizer?.claims);
  
   try {
     // todo: If query string is available in event object

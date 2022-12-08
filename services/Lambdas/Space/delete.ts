@@ -1,6 +1,6 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
 import {DynamoDB} from 'aws-sdk';
-import { corsHandler } from '../../utils/corsHandler';
+import { corsHandler } from '../../../utils/corsHandler';
 
 const TABLE_NAME = process.env.TABLE_NAME;
 const PRIMARY_KEY = process.env.PRIMARY_KEY;

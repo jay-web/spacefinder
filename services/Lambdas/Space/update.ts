@@ -1,7 +1,7 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
 import {DynamoDB} from 'aws-sdk';
-import { corsHandler } from '../../utils/corsHandler';
-import { generateRequestBody } from '../../utils/generateRequestBody';
+import { corsHandler } from '../../../utils/corsHandler';
+import { generateRequestBody } from '../../../utils/generateRequestBody';
 
 
 
